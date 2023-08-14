@@ -12,6 +12,10 @@ let minigametimer = 500//ミニゲームの制限時間
 let gametimer = 250//メイン表示じかん
 let speed = 1;//スピードアップ用
 let a = Math.ceil(Math.random() * 3 * level); //クリック回数の決めるやつ
+let music = []
+music[0] = new Audio("Quiz-Buzzer01-1.mp3");
+music[1] = new Audio("Quiz-Question02-1.mp3");
+music[2] = new Audio("Quiz-Wrong_Buzzer01-1.mp3");
 //ここまでが再設定してはいけない関数
 function setup() {
     createCanvas(canvassize.w, canvassize.h);
@@ -40,10 +44,12 @@ function mouseClicked() {
 function main() {
     //ここにメインのハート表示とかをする。
     background(125);
-    /*デバッグ用フレームカウンター
+    //デバッグ用フレームカウンター
+    /*
     textSize(10);
     text(frameCount, 30, 30)
-    ここまで*/
+    */
+    //ここまで
     miniflag = 0;
     textSize(50);
     if (hart == 4) {
@@ -74,10 +80,14 @@ function main() {
 }
 //ミニゲームのくりあ判定
 function minigameclear() {
-    let half=gametimer/2
-    if (frameCount > minigametimer && frameCount % minigametimer == half) {
+    if (frameCount > minigametimer && frameCount % minigametimer == 50) {
         if (a != mousecount) {
             hart--
+            music[2].currentTime = 0;
+            music[2].play()
+        } else {
+            music[0].currentTime = 0;
+            music[0].play()
         }
         mousecount = 0
         count++
@@ -85,6 +95,9 @@ function minigameclear() {
             level++
         }
         a=Math.ceil(Math.random() * 2 )+Math.ceil(Math.random() * level);
+    }
+    if (frameCount % minigametimer == 150) {
+        music[1].play()
     }
 }
 //描く
