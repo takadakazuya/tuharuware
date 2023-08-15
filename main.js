@@ -21,7 +21,7 @@ function setup() {
     createCanvas(canvassize.w, canvassize.h);
     background(125);
 }
-function minigame(level, a) {
+function minigame() {
     //ミニゲームの内容。ミニゲームごとに作るが仮状態に一つ。
     //クリック回数のミニゲーム。多すぎても少なすぎてもいけない。
     background(125);
@@ -73,7 +73,7 @@ function main() {
     }
     if (frameCount % minigametimer > gametimer ) {
         //ハートの表示が終了すると次のミニゲームになる
-        minigame(level, a)
+        minigame()
     }
     //クリア判定
     minigameclear()
@@ -91,10 +91,11 @@ function minigameclear() {
         }
         mousecount = 0
         count++
-        if (count % 4 == 0 && level < 3) {
+        if (count % 4 == 0) {
             level++
+            //条件分に&&level<3などを入れると無限に上昇しなくなるのでお試しあれ。
         }
-        a=Math.ceil(Math.random() * 2 )+Math.ceil(Math.random() * level);
+        a=Math.ceil(Math.random() * 3 )*Math.ceil(Math.random() * level);
     }
     if (frameCount % minigametimer == 150) {
         music[1].play()
