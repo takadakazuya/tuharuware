@@ -16,6 +16,8 @@ let music = []
 music[0] = new Audio("Quiz-Buzzer01-1.mp3");
 music[1] = new Audio("Quiz-Question02-1.mp3");
 music[2] = new Audio("Quiz-Wrong_Buzzer01-1.mp3");
+music[3] = new Audio("Countdown04-5.mp3");
+music[4] = new Audio("Countdown04-6.mp3");
 //ここまでが再設定してはいけない関数
 function setup() {
     createCanvas(canvassize.w, canvassize.h);
@@ -34,11 +36,39 @@ function minigame() {
     textSize(30);
     text("クリック" + a + "回だけしよ", 60, 200);
     miniflag = 1;//ミニゲーム開始
+    seigentimer();//制限時間の表示
 }
 //クリック処理
 function mouseClicked() {
     if (miniflag == 1) {
         mousecount++;
+    }
+}
+//制限時間を設ける
+function seigentimer() {
+    let keisan =gametimer-(frameCount%gametimer);
+    rect(10, 300, keisan, 10)
+    //デバッグ用
+    //text(keisan, 10, 10)
+    //ここまで
+    if (keisan <= 180 && keisan > 120) {
+        text("３", 10, 280);
+        if (keisan == 170) {
+            music[3].currentTime = 0;
+            music[3].play()
+        }
+    } else if (keisan <= 120 && keisan > 60) {
+        text("2", 10, 280);
+        if (keisan == 110) {
+            music[3].currentTime = 0;
+            music[3].play()
+        }
+    } else if (keisan <= 60) {
+        text("1", 10, 280);
+        if (keisan == 50) {
+            music[4].currentTime = 0;
+            music[4].play()
+        }
     }
 }
 function main() {
@@ -80,24 +110,25 @@ function main() {
 }
 //ミニゲームのくりあ判定
 function minigameclear() {
-    if (frameCount > minigametimer && frameCount % minigametimer == 50) {
+    if (frameCount > minigametimer && frameCount % minigametimer == 10) {
         if (a != mousecount) {
-            hart--
             music[2].currentTime = 0;
             music[2].play()
         } else {
             music[0].currentTime = 0;
             music[0].play()
         }
-        mousecount = 0
-        count++
-        if (count % 4 == 0) {
-            level++
-            //条件分に&&level<3などを入れると無限に上昇しなくなるのでお試しあれ。
-        }
-        a=Math.ceil(Math.random() * 3 )*Math.ceil(Math.random() * level);
     }
-    if (frameCount % minigametimer == 150) {
+    if (frameCount > minigametimer && frameCount % minigametimer == 70) {
+        if (a != mousecount) hart--;
+        count++
+        if (count % 4 == 0 && level < 3) {
+            level++
+        }
+        mousecount = 0
+        a=Math.ceil(Math.random() * 3 )*level;
+    }
+    if (frameCount % minigametimer == 80) {
         music[1].play()
     }
 }
